@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Bíblica - Videos</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0c10;
+            --card-bg: rgba(22, 24, 30, 0.7);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --card-border-hover: rgba(212, 175, 55, 0.4);
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --accent-gold: #d4af37;
+            --accent-gold-glow: rgba(212, 175, 55, 0.2);
+            --accent-purple: #8b5cf6;
+            --accent-purple-glow: rgba(139, 92, 246, 0.3);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.05) 0%, transparent 40%);
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f1015;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #272935;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-gold);
+        }
+
+        header {
+            padding: 4rem 2rem 2rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #fff 30%, var(--accent-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.1);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        main {
+            flex: 1;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Controls Section (Filters & Search) */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            background: rgba(17, 19, 25, 0.4);
+            border: 1px solid var(--card-border);
+            padding: 1.5rem;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        @media (min-width: 768px) {
+            .controls {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        /* Search input styling */
+        .search-wrapper {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .search-wrapper input {
+            width: 100%;
+            padding: 0.8rem 1.2rem 0.8rem 2.8rem;
+            background: rgba(10, 11, 16, 0.8);
+            border: 1px solid var(--card-border);
+            border-radius: 30px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+
+        .search-wrapper input:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 15px var(--accent-gold-glow);
+        }
+
+        .search-wrapper svg {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            fill: var(--text-secondary);
+            pointer-events: none;
+            transition: var(--transition);
+        }
+
+        .search-wrapper input:focus + svg {
+            fill: var(--accent-gold);
+        }
+
+        /* Filter Pills styling */
+        .filters {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            color: var(--text-secondary);
+            padding: 0.6rem 1.4rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover {
+            color: var(--text-primary);
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--accent-gold) 0%, #b89225 100%);
+            border-color: var(--accent-gold);
+            color: #0b0c10;
+            font-weight: 600;
+            box-shadow: 0 4px 15px var(--accent-gold-glow);
+        }
+
+        /* Book Grid styling */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            transition: var(--transition);
+        }
+
+        /* Card styling */
+        .book-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.8rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            text-decoration: none;
+            color: inherit;
+            height: 100%;
+        }
+
+        .book-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent-purple-glow) 0%, transparent 100%);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 0;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--card-border-hover);
+            box-shadow: 
+                0 10px 25px -5px rgba(0, 0, 0, 0.5),
+                0 0 15px var(--accent-gold-glow);
+        }
+
+        .book-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .book-icon {
+            font-size: 2.2rem;
+            background: rgba(255, 255, 255, 0.04);
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+
+        .book-card:hover .book-icon {
+            transform: scale(1.1) rotate(5deg);
+            background: rgba(212, 175, 55, 0.1);
+            border-color: rgba(212, 175, 55, 0.2);
+        }
+
+        .testament-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-secondary);
+        }
+
+        .book-card[data-testament="antiguo"] .testament-badge {
+            color: var(--accent-gold);
+            border-color: rgba(212, 175, 55, 0.2);
+            background: rgba(212, 175, 55, 0.04);
+        }
+
+        .book-card[data-testament="nuevo"] .testament-badge {
+            color: #a78bfa;
+            border-color: rgba(167, 139, 250, 0.2);
+            background: rgba(167, 139, 250, 0.04);
+        }
+
+        .book-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            transition: var(--transition);
+        }
+
+        .book-card:hover .book-name {
+            color: var(--accent-gold);
+        }
+
+        .category-tag {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-footer {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--accent-gold);
+            transition: var(--transition);
+        }
+
+        .card-footer svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+            transition: var(--transition);
+        }
+
+        .book-card:hover .card-footer {
+            color: #ffffff;
+            transform: translateX(3px);
+        }
+
+        .book-card:hover .card-footer svg {
+            transform: translateX(3px);
+        }
+
+        /* Empty state styling */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--card-bg);
+            border: 1px dashed var(--card-border);
+            border-radius: 16px;
+            display: none;
+        }
+
+        .empty-state h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+        }
+
+        footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--card-border);
+            background: rgba(10, 11, 16, 0.5);
+            margin-top: auto;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        footer a {
+            color: var(--accent-gold);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Entrance Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .book-card {
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>BIBLIOTECA BÍBLICA</h1>
+        <div class="subtitle">Colección Multimedia de Videos de la Biblia</div>
+    </header>
+
+    <main>
+        <section class="controls">
+            <!-- Search bar -->
+            <div class="search-wrapper">
+                <input type="text" id="search-input" placeholder="Buscar libro..." autocomplete="off">
+                <svg viewBox="0 0 24 24">
+                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="antiguo">Antiguo Testamento</button>
+                <button class="filter-btn" data-filter="nuevo">Nuevo Testamento</button>
+            </div>
+        </section>
+
+        <!-- Grid -->
+        <section class="books-grid" id="books-grid">
+            <!-- Cards generated dynamically -->
+            <div class="empty-state" id="empty-state">
+                <h3>No se encontraron libros</h3>
+                <p>Intenta con otra búsqueda o cambia el filtro de testamento.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Proyecto Biblioteca Bíblica.</p>
+        <p>Todos los derechos reservados. Diseñado con una interfaz premium.</p>
+    </footer>
+
+    <script>
+        // Data containing all 30 books currently present in HTML and MP4 format
+        const books = [
+            { name: "Génesis", file: "genesis.html", testament: "antiguo", category: "Pentateuco", icon: "📖" },
+            { name: "Éxodo", file: "exodo.html", testament: "antiguo", category: "Pentateuco", icon: "🚶‍♂️" },
+            { name: "Levítico", file: "levitico.html", testament: "antiguo", category: "Pentateuco", icon: "🔥" },
+            { name: "Números", file: "numeros.html", testament: "antiguo", category: "Pentateuco", icon: "📊" },
+            { name: "Deuteronomio", file: "deuteronomio.html", testament: "antiguo", category: "Pentateuco", icon: "📜" },
+            { name: "Josué", file: "josue.html", testament: "antiguo", category: "Histórico", icon: "⚔️" },
+            { name: "Jueces", file: "jueces.html", testament: "antiguo", category: "Histórico", icon: "⚖️" },
+            { name: "Rut", file: "rut.html", testament: "antiguo", category: "Histórico", icon: "🌾" },
+            { name: "1 Samuel", file: "1samuel.html", testament: "antiguo", category: "Histórico", icon: "👑" },
+            { name: "2 Samuel", file: "2samuel.html", testament: "antiguo", category: "Histórico", icon: "🏰" },
+            { name: "1 Reyes", file: "1reyes.html", testament: "antiguo", category: "Histórico", icon: "🏛️" },
+            { name: "Ester", file: "ester.html", testament: "antiguo", category: "Histórico", icon: "👸" },
+            { name: "Job", file: "job.html", testament: "antiguo", category: "Poético / Sabiduría", icon: "🌬️" },
+            { name: "Daniel", file: "daniel.html", testament: "antiguo", category: "Profetas", icon: "🦁" },
+            { name: "Jonás", file: "jonas.html", testament: "antiguo", category: "Profetas", icon: "🐋" },
+            { name: "Mateo", file: "mateo.html", testament: "nuevo", category: "Evangelios", icon: "✝️" },
+            { name: "Marcos", file: "marcos.html", testament: "nuevo", category: "Evangelios", icon: "📖" },
+            { name: "Lucas", file: "lucas.html", testament: "nuevo", category: "Evangelios", icon: "🐂" },
+            { name: "Juan", file: "juan.html", testament: "nuevo", category: "Evangelios", icon: "🦅" },
+            { name: "Hechos", file: "hechos.html", testament: "nuevo", category: "Histórico NT", icon: "🔥" },
+            { name: "Romanos", file: "romanos.html", testament: "nuevo", category: "Epístolas Paulinas", icon: "🏛️" },
+            { name: "1 Corintios", file: "1corintios.html", testament: "nuevo", category: "Epístolas Paulinas", icon: "✉️" },
+            { name: "Gálatas", file: "galatas.html", testament: "nuevo", category: "Epístolas Paulinas", icon: "🕊️" },
+            { name: "Efesios", file: "efesios.html", testament: "nuevo", category: "Epístolas Paulinas", icon: "🛡️" },
+            { name: "Filipenses", file: "filipenses.html", testament: "nuevo", category: "Epístolas Paulinas", icon: "💖" },
+            { name: "Colosenses", file: "colosenses.html", testament: "nuevo", category: "Epístolas Paulinas", icon: "🧬" },
+            { name: "1 Tesalonicenses", file: "1tesalonicenses.html", testament: "nuevo", category: "Epístolas Paulinas", icon: "🎺" },
+            { name: "Hebreos", file: "hebreos.html", testament: "nuevo", category: "Epístolas Generales", icon: "⚓" },
+            { name: "Santiago", file: "santiago.html", testament: "nuevo", category: "Epístolas Generales", icon: "🛠️" },
+            { name: "Apocalipsis", file: "apocalipsis.html", testament: "nuevo", category: "Profético / Apocalíptico", icon: "👑" }
+        ];
+
+        const grid = document.getElementById('books-grid');
+        const searchInput = document.getElementById('search-input');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const emptyState = document.getElementById('empty-state');
+
+        let currentFilter = 'all';
+        let searchQuery = '';
+
+        // Function to render books
+        function renderBooks() {
+            // Remove existing card elements
+            const cards = grid.querySelectorAll('.book-card');
+            cards.forEach(card => card.remove());
+
+            // Filter data
+            const filteredBooks = books.filter(book => {
+                const matchesFilter = currentFilter === 'all' || book.testament === currentFilter;
+                const matchesSearch = book.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                      book.category.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesFilter && matchesSearch;
+            });
+
+            // Show or hide empty state
+            if (filteredBooks.length === 0) {
+                emptyState.style.display = 'block';
+            } else {
+                emptyState.style.display = 'none';
+            }
+
+            // Create cards
+            filteredBooks.forEach((book, index) => {
+                const card = document.createElement('a');
+                card.href = book.file;
+                card.className = 'book-card';
+                card.setAttribute('data-testament', book.testament);
+                card.style.animationDelay = `${index * 0.03}s`;
+
+                card.innerHTML = `
+                    <div class="card-content">
+                        <div class="card-header">
+                            <div class="book-icon">${book.icon}</div>
+                            <span class="testament-badge">${book.testament === 'antiguo' ? 'A.T.' : 'N.T.'}</span>
+                        </div>
+                        <h2 class="book-name">${book.name}</h2>
+                        <span class="category-tag">${book.category}</span>
+                    </div>
+                    <div class="card-footer">
+                        Ver Video
+                        <svg viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Search Input Event
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderBooks();
+        });
+
+        // Filter Buttons Events
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.getAttribute('data-filter');
+                renderBooks();
+            });
+        });
+
+        // Initial render
+        renderBooks();
+    </script>
+</body>
+</html>
